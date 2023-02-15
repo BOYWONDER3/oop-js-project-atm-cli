@@ -1,4 +1,4 @@
-// 1. Ask for account
+// 1. Ask for account = DONE
 // 2. If account does not exist, ask to create account
 // 3. Ask what they want to do
 // 4. Execute command
@@ -15,7 +15,13 @@ async function main() {
     const accountName = await CommandLine.ask(
         'Which account would like to access?'
         )
-        const account = Account.find(accountName)
+        const account = await Account.find(accountName)
+        if (account == null)
+        if (account) {
+            console.log('Found account')
+        } else {
+            console.log('Cannot find')
+        }
 }
 
 main()
