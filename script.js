@@ -10,18 +10,30 @@
 const Account = require('./Account')
 const CommandLine = require('./CommandLine')
 
-async function main() {
-
-    const accountName = await CommandLine.ask(
+async function main() { const accountName = await CommandLine.ask(
         'Which account would like to access?'
         )
         const account = await Account.find(accountName)
-        if (account == null)
-        if (account) {
-            console.log('Found account')
-        } else {
-            console.log('Cannot find')
-        }
+        if (account == null) account = await promptCreateAcccount(accountName)
+        if (account != null) await promptTask(account)
+}
+
+async function promptCreateAcccount(accountName) {
+  const response = await CommandLine.ask('That account does not exist, would you like to create it? (yes/no)')
+
+  if (response === 'yes') {
+   return await Account.create(accountName)
+  }
+}
+
+async function promptTask(account) {
+    const response = await CommandLine.ask(
+        'what would like to do? (view/deposit/withdraw)'
+        )
+    if(response === 'deposit') {
+        const amount = await CommandLine.ask('how much?')
+       await account.deposit(amount)
+    }
 }
 
 main()

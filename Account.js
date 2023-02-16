@@ -21,6 +21,10 @@ get filePath() {
 async #load() {
     this.#balance = parseFloat(await FileSystem.read(this.filePath))
 }
+async deposit(amount) {
+    this.#balance = this.#balance + amount
+}
+
     static async find(accountName) {
         const account = new Account(accountName)
         try {
@@ -29,7 +33,15 @@ async #load() {
         } catch (e) {
             return
         }
+    }
 
-        await account.load()
+
+    static async create(accountName) {
+        const account = new Account(accountName)
+
+        await FileSystem.write(account.filePath, 0)
+        account.#balance = 0
+
+        return account
     }
 }
