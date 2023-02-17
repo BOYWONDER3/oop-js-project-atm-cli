@@ -21,6 +21,12 @@ get filePath() {
 async #load() {
     this.#balance = parseFloat(await FileSystem.read(this.filePath))
 }
+async withdraw(amount) {
+    if (this.balance < amount) throw new Error()
+    await FileSystem.write(this.filePath, this.#balance - amount)
+    this.#balance = this.#balance - amount
+}
+
 async deposit(amount) {
     await FileSystem.write(this.filePath, this.#balance + amount)
     this.#balance = this.#balance + amount

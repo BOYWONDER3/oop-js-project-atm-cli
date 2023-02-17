@@ -38,7 +38,11 @@ async function promptTask(account) {
 
     if(response === 'withdraw') {
         const amount = parseFloat(await CommandLine.ask('how much?'))
-       await account.deposit(amount)
+        try {
+            await account.withdraw(amount)
+        } catch (e) {
+            CommandLine.print('Sorry we were unabel to make the withdrawal, please ensure you have enough balance')
+        } 
        CommandLine.print('Your balance is ${account.balance}')
     }
 }
